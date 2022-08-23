@@ -8,6 +8,55 @@ body {
   height: 100vh;
 }
 
+.modal {
+  position: absolute;
+  z-index: 3;
+  background: #fff;
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.modal img {
+  width: 130px;
+  height: 92px;
+
+  margin: 72px 0 94px;
+}
+
+.modal input {
+  width: 261px;
+  height: 54px;
+
+  background: #ffffff;
+  border: 1px solid #d7d7d7;
+  border-radius: 4px;
+
+  text-align: center;
+}
+
+.modal input::placeholder {
+  color: #aeaeae;
+}
+
+.modal button {
+  width: 110px;
+  height: 45px;
+
+  margin-top: 15px;
+
+  font-size: 18px;
+  color: #696969;
+
+  background: #e7e7e7;
+  border-radius: 9px;
+  border: none;
+}
+
 header {
   width: 100%;
   height: 80px;
@@ -111,4 +160,8 @@ main {
 
 .user-input ion-icon {
   font-size: 32px;
+}
+
+.hidden {
+  display: none;
 }
