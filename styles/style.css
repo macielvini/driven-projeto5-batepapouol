@@ -17,7 +17,6 @@ body {
 
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 }
 
@@ -26,6 +25,14 @@ body {
   height: 92px;
 
   margin: 72px 0 94px;
+}
+
+.modal .error-message {
+  width: 200px;
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+  color: #ff6060;
 }
 
 .modal input {
@@ -160,23 +167,6 @@ main {
 
 .user-input ion-icon {
   font-size: 32px;
-}
-
-aside {
-  /* height: 100%;
-  width: 100%;
-
-  background: rgba(0, 0, 0, 0.6);
-
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 4;
-
-  font-size: 16px;
-
-  display: flex; */
-  /* justify-content: flex-end; */
 }
 
 .sidebar {
