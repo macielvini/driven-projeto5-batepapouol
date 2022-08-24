@@ -162,6 +162,85 @@ main {
   font-size: 32px;
 }
 
+aside {
+  /* height: 100%;
+  width: 100%;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 4;
+
+  font-size: 16px;
+
+  display: flex; */
+  /* justify-content: flex-end; */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  z-index: 5;
+
+  height: 100%;
+  width: 260px;
+  padding: 0 18px;
+  background-color: #fff;
+
+  transition: all 0.4s ease;
+}
+
+aside .sidebar p {
+  font-weight: 700;
+  text-align: center;
+
+  width: 170px;
+  margin: 24px auto 27px;
+}
+
+.sidebar li {
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sidebar li ion-icon {
+  font-size: 25px;
+}
+
+.sidebar-background {
+  position: fixed;
+  top: 0;
+  right: -100%;
+
+  width: 200%;
+  height: 100%;
+
+  opacity: 0;
+  pointer-events: none;
+
+  z-index: 4;
+
+  background: rgba(0, 0, 0, 0.6);
+  transition: all 0.4s ease;
+}
+
+.open .sidebar {
+  right: 0;
+}
+
+.open .sidebar-background {
+  right: 260px;
+  opacity: 1;
+
+  pointer-events: auto;
+}
+
 .hidden {
   display: none;
 }

@@ -13,7 +13,7 @@
 
 <body>
   <div class="container">
-    <div class="modal">
+    <div class="modal hidden">
 
       <img src="./media/logo 1.png" alt="logo bate-papo uol">
       <input type="text" placeholder="Digite seu nome">
@@ -23,7 +23,7 @@
 
     <header>
       <img src="./media/logo 1.png" alt="logo do bate-papo uol">
-      <ion-icon name="people"></ion-icon>
+      <ion-icon name="people" onclick="showSidebar()"></ion-icon>
     </header>
 
     <main>
@@ -71,7 +71,39 @@
       </div>
     </main>
 
-    <aside></aside>
+    <aside>
+
+      <div class="sidebar">
+        <p>Escolha um contato para enviar mensagem:</p>
+        <ul class="contacts" aria-label="">
+          <li>
+            <ion-icon name="people"></ion-icon>
+            <span class="contact-name">Todos</span>
+          </li>
+          <li>
+            <ion-icon name="person-circle"></ion-icon>
+            <span class="contact-name">João</span>
+          </li>
+        </ul>
+
+        <p>Escolha a visibilidade</p>
+        <ul class="visibility" aria-label="">
+          <ul>
+            <li>
+              <ion-icon name="lock-open"></ion-icon>
+              Publico
+            </li>
+            <li>
+              <ion-icon name="lock-open"></ion-icon>
+              Reservadamente
+            </li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="sidebar-background" onclick="showSidebar()">
+      </div>
+    </aside>
 
   </div>
 
