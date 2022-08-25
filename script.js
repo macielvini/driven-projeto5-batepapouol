@@ -1,11 +1,25 @@
+const userObj = { name: "" };
+let test;
+
 function hideModal() {
   const modal = document.querySelector(".modal");
   modal.classList.add("hidden");
 }
 
-function modalRequestValidName() {
-  const e = document.querySelector(".error-message");
-  e.innerText = "Nome em uso ou inválido! Digite um novo nome:";
+function modalRequestValidName(promise) {
+  const status = promise.response.status;
+  const element = document.querySelector(".error-message");
+
+  switch (status) {
+    case 400:
+      element.innerText = "Nome em uso ou em branco!";
+      break;
+
+    default:
+      element.innerText = "Nome inválido!"
+      break;
+  }
+
 }
 
 function showSidebar() {
@@ -14,11 +28,19 @@ function showSidebar() {
 }
 
 function getUserName() {
-  const userInput = document.querySelector(".modal input").value;
-  const userName = { name: userInput };
+  const userNameInput = document.querySelector(".modal input").value;
+  userObj.name = userNameInput;
 
-  const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userName);
+  const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userObj);
 
   promise.then(hideModal);
-  promise.catch(modalRequestValidName)
+  promise.catch(modalRequestValidName);
+
+
+  // setInterval(isUserOnline, 5000);
+}
+
+function isUserOnline() {
+  const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", userObj);
+  promise.then(() => console.log("online"));
 }
