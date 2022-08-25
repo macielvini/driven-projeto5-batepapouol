@@ -27,11 +27,9 @@ function showSidebar() {
   sidebar.classList.toggle("open");
 }
 
-getUserName();
-
 function getUserName() {
-  // const userNameInput = document.querySelector(".modal input").value;
-  const userNameInput = "vini1";
+  const userNameInput = document.querySelector(".modal input").value;
+
   userObj.name = userNameInput;
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userObj);
@@ -41,12 +39,14 @@ function getUserName() {
 
   getMessages();
 
-  // setInterval(isUserOnline, 5000);
+  setInterval(isUserOnline, 5000);
+  setInterval(getMessages, 3000);
+  setInterval(getParticipants, 1000 * 10);
 }
 
 function isUserOnline() {
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", userObj);
-  promise.then(() => console.log("online"));
+  promise.catch(realoadPage);
 }
 
 function getMessages() {
@@ -61,7 +61,7 @@ function displayMessages(response) {
   for (let i = 0; i < messages.length; i++) {
 
     const from = messages[i].from;
-    let to = messages[i].to + ":";
+    let to = "para" + messages[i].to + ":";
     const text = messages[i].text;
     const type = messages[i].type;
     const time = messages[i].time;
@@ -78,4 +78,39 @@ function displayMessages(response) {
   `
 
   }
+}
+
+function sendMessage() {
+  const userMessage = document.querySelector(".user-input #user-message").value;
+
+  const messageObj = { from: userObj.name, to: "Todos", text: userMessage, type: "message" };
+
+  const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", messageObj);
+  console.log(messageObj);
+  promise.catch(realoadPage);
+  promise.then(getMessages);
+}
+
+function getParticipants() {
+  const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
+
+  promise.then(displayParticipants)
+}
+
+function displayParticipants(response) {
+  const participants = response.data;
+  const elementHTML = document.querySelector(".contacts");
+
+  for (let i = 0; i < participants.length; i++) {
+    elementHTML.innerHTML += `
+    <li>
+      <ion-icon name="people"></ion-icon>
+      <span class="contact-name">${participants[i].name}</span>
+    </li>
+    `
+  }
+}
+
+function realoadPage() {
+  window.location.reload(true);
 }

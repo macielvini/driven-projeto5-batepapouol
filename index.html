@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bate-Papo UOL</title>
 
@@ -70,8 +69,8 @@
         </p>
       </div> -->
       <div class="user-input">
-        <input type="text" placeholder="Escreva aqui...">
-        <ion-icon name="paper-plane-outline"></ion-icon>
+        <textarea id="user-message" type="text" placeholder="Escreva aqui..."></textarea>
+        <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
       </div>
     </main>
 
@@ -83,10 +82,6 @@
           <li>
             <ion-icon name="people"></ion-icon>
             <span class="contact-name">Todos</span>
-          </li>
-          <li>
-            <ion-icon name="person-circle"></ion-icon>
-            <span class="contact-name">João</span>
           </li>
         </ul>
 
