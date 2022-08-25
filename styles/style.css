@@ -129,12 +129,12 @@ main {
   line-height: 20px;
 }
 
-.time-stamp {
+.time {
   color: #aaaaaa;
 }
 
-.user-name,
-.message-to {
+.from,
+.to {
   font-weight: 700;
 }
 
