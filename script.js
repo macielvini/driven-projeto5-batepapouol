@@ -27,7 +27,7 @@ function showSidebar() {
   sidebar.classList.toggle("open");
 }
 
-function getUserName() {
+function loadChat() {
   const userNameInput = document.querySelector(".modal input").value;
 
   userObj.name = userNameInput;
@@ -40,7 +40,7 @@ function getUserName() {
   getMessages();
 
   setInterval(isUserOnline, 5000);
-  setInterval(getMessages, 3000);
+  // setInterval(getMessages, 3000);
   setInterval(getParticipants, 1000 * 10);
 }
 
@@ -76,19 +76,23 @@ function displayMessages(response) {
       <span class="text">${text}</span>
     </li>
   `
+    const message = document.querySelector(".message:last-of-type");
+    message.scrollIntoView();
 
   }
 }
 
 function sendMessage() {
-  const userMessage = document.querySelector(".user-input #user-message").value;
+  const userMessage = document.querySelector(".user-input #user-message");
 
-  const messageObj = { from: userObj.name, to: "Todos", text: userMessage, type: "message" };
+  const messageObj = { from: userObj.name, to: "Todos", text: userMessage.value, type: "message" };
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", messageObj);
-  console.log(messageObj);
   promise.catch(realoadPage);
-  promise.then(getMessages);
+  promise.then(() => {
+    getMessages();
+    userMessage.value = "";
+  });
 }
 
 function getParticipants() {
