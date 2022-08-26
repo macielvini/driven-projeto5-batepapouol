@@ -1,5 +1,12 @@
 const userObj = { name: "" };
 let test;
+const userInput = document.querySelector(".user-input #user-message");
+
+userInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+})
 
 function hideModal() {
   const modal = document.querySelector(".modal");
@@ -40,7 +47,7 @@ function loadChat() {
   getMessages();
 
   setInterval(isUserOnline, 5000);
-  // setInterval(getMessages, 3000);
+  setInterval(getMessages, 3000);
   setInterval(getParticipants, 1000 * 10);
 }
 
@@ -58,6 +65,8 @@ function displayMessages(response) {
   const messages = response.data;
   const chat = document.querySelector(".chat");
 
+  chat.innerHTML = "";
+
   for (let i = 0; i < messages.length; i++) {
 
     const from = messages[i].from;
@@ -66,10 +75,14 @@ function displayMessages(response) {
     const type = messages[i].type;
     const time = messages[i].time;
 
-    if (type === "status") to = "";
+    let statusClass = "";
+
+    if (type === "status") {
+      to = "";
+    }
 
     chat.innerHTML += `
-    <li class="message">
+    <li class="message ${type}">
       <span class="time">(${time})</span>
       <span class="from">${from}</span>
       <span class="to">${to}</span>
@@ -83,15 +96,14 @@ function displayMessages(response) {
 }
 
 function sendMessage() {
-  const userMessage = document.querySelector(".user-input #user-message");
 
-  const messageObj = { from: userObj.name, to: "Todos", text: userMessage.value, type: "message" };
+  const messageObj = { from: userObj.name, to: "Todos", text: userInput.value, type: "message" };
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", messageObj);
   promise.catch(realoadPage);
   promise.then(() => {
     getMessages();
-    userMessage.value = "";
+    userInput.value = "";
   });
 }
 

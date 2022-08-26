@@ -125,7 +125,7 @@ main {
   font-weight: 700;
 }
 
-.entered-left {
+.status {
   background: #dcdcdc;
 }
 
@@ -169,6 +169,10 @@ main {
 
 .user-input ion-icon {
   font-size: 32px;
+}
+
+.user-input ion-icon:hover {
+  cursor: pointer;
 }
 
 .sidebar {
