@@ -70,7 +70,7 @@ function displayMessages(response) {
   for (let i = 0; i < messages.length; i++) {
 
     const from = messages[i].from;
-    let to = "para" + messages[i].to + ":";
+    let to = "para " + messages[i].to + ":";
     const text = messages[i].text;
     const type = messages[i].type;
     const time = messages[i].time;
@@ -83,10 +83,12 @@ function displayMessages(response) {
 
     chat.innerHTML += `
     <li class="message ${type}">
-      <span class="time">(${time})</span>
-      <span class="from">${from}</span>
-      <span class="to">${to}</span>
-      <span class="text">${text}</span>
+     
+        <span class="time">(${time})</span>
+        <span class="from">${from}</span>
+        <span class="to">${to}</span>
+        <span class="text">${text}</span>
+      
     </li>
   `
     const message = document.querySelector(".message:last-of-type");
@@ -117,11 +119,24 @@ function displayParticipants(response) {
   const participants = response.data;
   const elementHTML = document.querySelector(".contacts");
 
+  elementHTML.innerHTML = `
+  <li class="selected" onclick="sendTo(this)">
+    <div>
+      <ion-icon name="people"></ion-icon>
+      <span class="contact-name">Todos</span>
+     </div>
+    <ion-icon name="checkmark-circle" class="check"></ion-icon>
+  </li > 
+`;
+
   for (let i = 0; i < participants.length; i++) {
     elementHTML.innerHTML += `
-    <li>
-      <ion-icon name="people"></ion-icon>
-      <span class="contact-name">${participants[i].name}</span>
+    <li onclick="sendTo(this)">
+      <div>
+        <ion-icon name="people"></ion-icon>
+        <span class="contact-name">${participants[i].name}</span>
+      </div>
+      <ion-icon name="checkmark-circle" class="check"></ion-icon>
     </li>
     `
   }
@@ -129,4 +144,16 @@ function displayParticipants(response) {
 
 function realoadPage() {
   window.location.reload(true);
+}
+
+function sendTo(element) {
+
+  const selected = document.querySelector(".selected");
+
+  if (selected !== undefined) {
+    selected.classList.remove("selected");
+  }
+
+  element.classList.add("selected");
+
 }

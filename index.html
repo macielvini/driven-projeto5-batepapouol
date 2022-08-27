@@ -34,6 +34,7 @@
     <div class="user-input">
       <textarea id="user-message" type="text" placeholder="Escreva aqui..."></textarea>
       <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
+      <p class="label-to"></p>
     </div>
 
     <aside>
@@ -41,9 +42,12 @@
       <div class="sidebar">
         <p>Escolha um contato para enviar mensagem:</p>
         <ul class="contacts" aria-label="">
-          <li>
-            <ion-icon name="people"></ion-icon>
-            <span class="contact-name">Todos</span>
+          <li class="selected" onclick="sendTo(this)">
+            <div>
+              <ion-icon name="people"></ion-icon>
+              <span class="contact-name">Todos</span>
+            </div>
+            <ion-icon name="checkmark-circle" class="check"></ion-icon>
           </li>
         </ul>
 
@@ -51,12 +55,16 @@
         <ul class="visibility" aria-label="">
           <ul>
             <li>
-              <ion-icon name="lock-open"></ion-icon>
-              Publico
+              <div>
+                <ion-icon name="lock-open"></ion-icon>
+                Publico
+              </div>
             </li>
             <li>
-              <ion-icon name="lock-open"></ion-icon>
-              Reservadamente
+              <div>
+                <ion-icon name="lock-open"></ion-icon>
+                Reservadamente
+              </div>
             </li>
           </ul>
         </ul>
