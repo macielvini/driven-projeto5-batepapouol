@@ -42,7 +42,7 @@
       <div class="sidebar">
         <p>Escolha um contato para enviar mensagem:</p>
         <ul class="contacts" aria-label="">
-          <li class="selected" onclick="sendTo(this)">
+          <li class="" onclick="toggleSelected(this)">
             <div>
               <ion-icon name="people"></ion-icon>
               <span class="contact-name">Todos</span>
@@ -54,17 +54,19 @@
         <p>Escolha a visibilidade</p>
         <ul class="visibility" aria-label="">
           <ul>
-            <li>
+            <li class="selected" onclick="toggleSelected(this)" data-type="message">
               <div>
                 <ion-icon name="lock-open"></ion-icon>
                 Publico
               </div>
+              <ion-icon name="checkmark-circle" class="check"></ion-icon>
             </li>
-            <li>
+            <li class="" onclick="toggleSelected(this)" data-type="private_message">
               <div>
-                <ion-icon name="lock-open"></ion-icon>
+                <ion-icon name="lock-closed"></ion-icon>
                 Reservadamente
               </div>
+              <ion-icon name="checkmark-circle" class="check"></ion-icon>
             </li>
           </ul>
         </ul>

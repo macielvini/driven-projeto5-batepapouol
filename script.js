@@ -8,6 +8,23 @@ userInput.addEventListener("keypress", function (event) {
   }
 })
 
+function loadChat() {
+  const userNameInput = document.querySelector(".modal input").value;
+
+  userObj.name = userNameInput;
+
+  const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userObj);
+
+  promise.then(hideModal);
+  promise.catch(modalRequestValidName);
+
+  getMessages();
+
+  setInterval(isUserOnline, 5000);
+  setInterval(getMessages, 3000);
+  setInterval(getParticipants, 1000 * 10);
+}
+
 function hideModal() {
   const modal = document.querySelector(".modal");
   modal.classList.add("hidden");
@@ -27,28 +44,6 @@ function modalRequestValidName(promise) {
       break;
   }
 
-}
-
-function showSidebar() {
-  const sidebar = document.querySelector("aside");
-  sidebar.classList.toggle("open");
-}
-
-function loadChat() {
-  const userNameInput = document.querySelector(".modal input").value;
-
-  userObj.name = userNameInput;
-
-  const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userObj);
-
-  promise.then(hideModal);
-  promise.catch(modalRequestValidName);
-
-  getMessages();
-
-  setInterval(isUserOnline, 5000);
-  setInterval(getMessages, 3000);
-  setInterval(getParticipants, 1000 * 10);
 }
 
 function isUserOnline() {
@@ -99,7 +94,8 @@ function displayMessages(response) {
 
 function sendMessage() {
 
-  const messageObj = { from: userObj.name, to: "Todos", text: userInput.value, type: "message" };
+  // const to = document.querySelector(".selected span").innerText;
+  const messageObj = { from: userObj.name, to: "Todos", text: userInput.value, type: checkVisibility() };
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", messageObj);
   promise.catch(realoadPage);
@@ -120,7 +116,7 @@ function displayParticipants(response) {
   const elementHTML = document.querySelector(".contacts");
 
   elementHTML.innerHTML = `
-  <li class="selected" onclick="sendTo(this)">
+  <li class="" onclick="toggleSelected(this)">
     <div>
       <ion-icon name="people"></ion-icon>
       <span class="contact-name">Todos</span>
@@ -131,7 +127,7 @@ function displayParticipants(response) {
 
   for (let i = 0; i < participants.length; i++) {
     elementHTML.innerHTML += `
-    <li onclick="sendTo(this)">
+    <li onclick="toggleSelected(this)">
       <div>
         <ion-icon name="people"></ion-icon>
         <span class="contact-name">${participants[i].name}</span>
@@ -142,18 +138,31 @@ function displayParticipants(response) {
   }
 }
 
+function checkVisibility() {
+  const selected = document.querySelector(".visibility .selected");
+
+  return selected.dataset.type;
+
+}
+
 function realoadPage() {
   window.location.reload(true);
 }
 
-function sendTo(element) {
+function toggleSelected(element) {
 
-  const selected = document.querySelector(".selected");
+  const selected = element.parentNode.querySelector(".selected");
 
-  if (selected !== undefined) {
+  if (selected !== null) {
     selected.classList.remove("selected");
   }
 
   element.classList.add("selected");
 
 }
+
+function showSidebar() {
+  const sidebar = document.querySelector("aside");
+  sidebar.classList.toggle("open");
+}
+
