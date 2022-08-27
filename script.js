@@ -65,22 +65,34 @@ function displayMessages(response) {
   for (let i = 0; i < messages.length; i++) {
 
     const from = messages[i].from;
-    let to = "para " + messages[i].to + ":";
     const text = messages[i].text;
-    const type = messages[i].type;
     const time = messages[i].time;
 
-    let statusClass = "";
+    let to = messages[i].to + ":";
+    let type = messages[i].type;
+    let privateOrPublic = "";
 
-    if (type === "status") {
-      to = "";
+    switch (type) {
+      case "status":
+        to = "";
+        privateOrPublic = "";
+        break;
+
+      case "private_message":
+        privateOrPublic = "reservadamente para ";
+        break;
+
+      default:
+        privateOrPublic = "para ";
+        break;
     }
 
     chat.innerHTML += `
-    <li class="message ${type}">
+    <li class="message ${type.replace(/_/g, "-")}">
      
         <span class="time">(${time})</span>
         <span class="from">${from}</span>
+        <span class="type">${privateOrPublic}</span>
         <span class="to">${to}</span>
         <span class="text">${text}</span>
       
