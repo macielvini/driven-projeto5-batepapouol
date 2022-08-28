@@ -1,15 +1,29 @@
 const userObj = { name: "" };
-let test;
-const userInput = document.querySelector(".user-input #user-message");
+const messageInput = document.querySelector(".user-input #user-message");
+let userNameInput = document.querySelector(".modal input");
+let participants = [];
+let lastSelected = "";
 
-userInput.addEventListener("keypress", function (event) {
+messageInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
+    event.preventDefault();
     sendMessage();
+  }
+});
+
+userNameInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    loadChat();
   }
 })
 
+function realoadPage() {
+  window.location.reload(true);
+}
+
 function loadChat() {
-  const userNameInput = document.querySelector(".modal input").value;
+  userNameInput = userNameInput.value;
 
   userObj.name = userNameInput;
 
@@ -19,6 +33,7 @@ function loadChat() {
   promise.catch(modalRequestValidName);
 
   getMessages();
+  getParticipants();
 
   setInterval(isUserOnline, 5000);
   setInterval(getMessages, 3000);
@@ -56,64 +71,68 @@ function getMessages() {
   promise.then(displayMessages);
 }
 
+function divMessage(message) {
+  return `
+  <li class="message ${message.type.replace(/_/g, "-")}">
+      <span class="time">(${message.time})</span>
+      <span class="from">${message.from}</span>
+      <span class="type">${message.privateOrPublic}</span>
+      <span class="to">${message.to}</span>
+      <span class="text">${message.text}</span>
+  </li>
+`;
+}
+
 function displayMessages(response) {
   const messages = response.data;
   const chat = document.querySelector(".chat");
 
   chat.innerHTML = "";
 
-  for (let i = 0; i < messages.length; i++) {
+  messages.forEach(msg => {
 
-    const from = messages[i].from;
-    const text = messages[i].text;
-    const time = messages[i].time;
+    const newMessage = {
+      from: msg.from,
+      text: msg.text,
+      time: msg.time,
+      type: msg.type,
+      to: msg.to + ":",
+      privateOrPublic: ""
+    }
 
-    let to = messages[i].to + ":";
-    let type = messages[i].type;
-    let privateOrPublic = "";
-
-    switch (type) {
+    switch (msg.type) {
       case "status":
-        to = "";
-        privateOrPublic = "";
+        newMessage.to = "";
+        newMessage.privateOrPublic = "";
         break;
 
       case "private_message":
-        privateOrPublic = "reservadamente para ";
+        newMessage.privateOrPublic = "reservadamente para ";
         break;
 
       default:
-        privateOrPublic = "para ";
+        newMessage.privateOrPublic = "para ";
         break;
     }
 
-    chat.innerHTML += `
-    <li class="message ${type.replace(/_/g, "-")}">
-     
-        <span class="time">(${time})</span>
-        <span class="from">${from}</span>
-        <span class="type">${privateOrPublic}</span>
-        <span class="to">${to}</span>
-        <span class="text">${text}</span>
-      
-    </li>
-  `
-    const message = document.querySelector(".message:last-of-type");
-    message.scrollIntoView();
+    chat.innerHTML += divMessage(newMessage);
 
-  }
+    const lastMessage = document.querySelector(".message:last-of-type");
+    lastMessage.scrollIntoView();
+
+  });
 }
 
 function sendMessage() {
 
   // const to = document.querySelector(".selected span").innerText;
-  const messageObj = { from: userObj.name, to: "Todos", text: userInput.value, type: checkVisibility() };
+  const messageObj = { from: userObj.name, to: "Todos", text: messageInput.value, type: checkVisibility() };
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", messageObj);
   promise.catch(realoadPage);
   promise.then(() => {
     getMessages();
-    userInput.value = "";
+    messageInput.value = "";
   });
 }
 
@@ -123,31 +142,32 @@ function getParticipants() {
   promise.then(displayParticipants)
 }
 
-function displayParticipants(response) {
-  const participants = response.data;
-  const elementHTML = document.querySelector(".contacts");
-
-  elementHTML.innerHTML = `
+function divParticipant(e) {
+  return `
   <li class="" onclick="toggleSelected(this)">
     <div>
       <ion-icon name="people"></ion-icon>
-      <span class="contact-name">Todos</span>
-     </div>
+      <span class="contact-name">${e}</span>
+    </div>
     <ion-icon name="checkmark-circle" class="check"></ion-icon>
-  </li > 
+  </li >
 `;
+}
 
-  for (let i = 0; i < participants.length; i++) {
-    elementHTML.innerHTML += `
-    <li onclick="toggleSelected(this)">
-      <div>
-        <ion-icon name="people"></ion-icon>
-        <span class="contact-name">${participants[i].name}</span>
-      </div>
-      <ion-icon name="checkmark-circle" class="check"></ion-icon>
-    </li>
-    `
-  }
+function displayParticipants(response) {
+  const elementHTML = document.querySelector(".contacts");
+  const data = response.data;
+
+  elementHTML.innerHTML = `${divParticipant("Todos")}
+  ${(() => {
+      if (lastSelected === "") return "";
+      return lastSelected.outerHTML;
+    })()}`;
+
+  data.filter(e => e.name !== lastSelected.innerText).forEach(e => {
+    elementHTML.innerHTML += divParticipant(e.name);
+  });
+
 }
 
 function checkVisibility() {
@@ -155,10 +175,6 @@ function checkVisibility() {
 
   return selected.dataset.type;
 
-}
-
-function realoadPage() {
-  window.location.reload(true);
 }
 
 function toggleSelected(element) {
@@ -171,6 +187,8 @@ function toggleSelected(element) {
 
   element.classList.add("selected");
 
+  lastSelected = element;
+
 }
 
 function showSidebar() {
@@ -178,3 +196,17 @@ function showSidebar() {
   sidebar.classList.toggle("open");
 }
 
+function isSomeoneSelected() {
+  const selected = document.querySelector(".contacts .selected");
+  if (selected !== null) {
+    return true;
+  }
+
+  return false;
+}
+
+function hideNonIntentionedMessages(message) {
+  if (message.to !== "Todos" || message.to !== userObj.name) {
+    return true;
+  }
+}

@@ -16,7 +16,7 @@
 
       <img src="./media/logo 1.png" alt="logo bate-papo uol">
       <span class="error-message"></span>
-      <input type="text" placeholder="Digite seu nome">
+      <input id="user-name" type="text" placeholder="Digite seu nome">
       <button onclick="loadChat()">Entrar</button>
 
     </div>
@@ -53,22 +53,22 @@
 
         <p>Escolha a visibilidade</p>
         <ul class="visibility" aria-label="">
-          <ul>
-            <li class="selected" onclick="toggleSelected(this)" data-type="message">
-              <div>
-                <ion-icon name="lock-open"></ion-icon>
-                Publico
-              </div>
-              <ion-icon name="checkmark-circle" class="check"></ion-icon>
-            </li>
-            <li class="" onclick="toggleSelected(this)" data-type="private_message">
-              <div>
-                <ion-icon name="lock-closed"></ion-icon>
-                Reservadamente
-              </div>
-              <ion-icon name="checkmark-circle" class="check"></ion-icon>
-            </li>
-          </ul>
+
+          <li class="selected" onclick="toggleSelected(this)" data-type="message">
+            <div>
+              <ion-icon name="lock-open"></ion-icon>
+              Publico
+            </div>
+            <ion-icon name="checkmark-circle" class="check"></ion-icon>
+          </li>
+          <li class="" onclick="toggleSelected(this)" data-type="private_message">
+            <div>
+              <ion-icon name="lock-closed"></ion-icon>
+              Reservadamente
+            </div>
+            <ion-icon name="checkmark-circle" class="check"></ion-icon>
+          </li>
+
         </ul>
       </div>
 
