@@ -8,7 +8,7 @@ const inputNameErrorMessage = document.querySelector(".error-message");
 const spinner = document.querySelector(".spinner");
 const modal = document.querySelector(".modal");
 const modalForm = document.querySelector(".modal-form");
-let userNameInput = document.querySelector(".modal input");
+const userNameInput = document.querySelector(".modal input");
 
 messageInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
@@ -53,12 +53,12 @@ function loadChat() {
 }
 
 function modalRequestValidName(answer) {
-  // userNameInput.value = "";
+  console.log(answer.response)
+  userNameInput.value = "";
   spinner.classList.add("hidden");
   modalForm.classList.remove("hidden");
   inputNameErrorMessage.innerText = "Nome inválido!";
 }
-
 
 function isUserOnline() {
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", userObj);
