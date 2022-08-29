@@ -143,7 +143,7 @@ function getParticipants() {
 
 function divParticipant(e) {
   return `
-  <li class="" onclick="selectParticipant(this)">
+  <li class="" onclick="selectParticipant(this)" data-identifier="participant">
     <div>
       <ion-icon name="people"></ion-icon>
       <span class="contact-name">${e}</span>
