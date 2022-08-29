@@ -90,7 +90,7 @@ function displayMessages(response) {
 
   chat.innerHTML = "";
 
-  messages.forEach(msg => {
+  messages.filter(msg => msg.to === userObj.name || msg.to === "Todos" || msg.from === userObj.name).forEach(msg => {
 
     const newMessage = {
       from: msg.from,
@@ -237,8 +237,8 @@ function showSidebar() {
   sidebar.classList.toggle("open");
 }
 
-function hideNonIntentionedMessages(message) {
-  if (message.to !== "Todos" || message.to !== userObj.name) {
-    return true;
-  }
-}
+// function hideNonIntentionedMessages(message) {
+//   if (message.to === "Todos" || message.to === userObj.name) {
+//     return true;
+//   }
+// }
