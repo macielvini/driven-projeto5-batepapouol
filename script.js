@@ -3,6 +3,7 @@ const messageInput = document.querySelector(".user-input #user-message");
 let userNameInput = document.querySelector(".modal input");
 let participants = [];
 let lastSelected = "";
+let lastSelectedName = "";
 
 messageInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
@@ -126,7 +127,7 @@ function displayMessages(response) {
 function sendMessage() {
 
   // const to = document.querySelector(".selected span").innerText;
-  const messageObj = { from: userObj.name, to: "Todos", text: messageInput.value, type: checkVisibility() };
+  const messageObj = { from: userObj.name, to: lastSelectedName, text: messageInput.value, type: checkVisibility() };
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", messageObj);
   promise.catch(realoadPage);
@@ -144,7 +145,7 @@ function getParticipants() {
 
 function divParticipant(e) {
   return `
-  <li class="" onclick="toggleSelected(this)">
+  <li class="" onclick="selectParticipant(this)">
     <div>
       <ion-icon name="people"></ion-icon>
       <span class="contact-name">${e}</span>
@@ -158,16 +159,53 @@ function displayParticipants(response) {
   const elementHTML = document.querySelector(".contacts");
   const data = response.data;
 
-  elementHTML.innerHTML = `${divParticipant("Todos")}
-  ${(() => {
-      if (lastSelected === "") return "";
-      return lastSelected.outerHTML;
-    })()}`;
 
-  data.filter(e => e.name !== lastSelected.innerText).forEach(e => {
+
+  elementHTML.innerHTML = divParticipant("Todos") +
+    (() => {
+
+      if (lastSelected === "") {
+        lastSelectedName = "Todos";
+        console.log(lastSelectedName);
+        return "";
+      }
+
+      return lastSelected.outerHTML;
+
+    })();
+
+  data.filter(e => e.name !== lastSelectedName).forEach(e => {
     elementHTML.innerHTML += divParticipant(e.name);
   });
 
+}
+
+function selectVisibility(element) {
+  const selected = element.parentNode.querySelector(".selected");
+
+  if (selected !== null) {
+    selected.classList.remove("selected");
+  }
+
+  element.classList.add("selected");
+
+  updateLabelTo();
+}
+
+function updateLabelTo() {
+  const visibility = document.querySelector(".visibility .selected");
+  const type = visibility.dataset.type;
+  const labelTo = document.querySelector(".label-to");
+
+  console.log(type)
+
+  if (type === "private_message") {
+    labelTo.innerText = `Enviando para ${lastSelectedName} (reservadamente)`
+  } else if (lastSelectedName !== "Todos" && lastSelectedName !== "" && type == "message") {
+    labelTo.innerText = `Enviando para ${lastSelectedName}`
+  } else {
+    labelTo.innerText = "";
+  }
 }
 
 function checkVisibility() {
@@ -177,7 +215,7 @@ function checkVisibility() {
 
 }
 
-function toggleSelected(element) {
+function selectParticipant(element) {
 
   const selected = element.parentNode.querySelector(".selected");
 
@@ -188,21 +226,15 @@ function toggleSelected(element) {
   element.classList.add("selected");
 
   lastSelected = element;
+  lastSelectedName = element.querySelector(".contact-name").innerText;
+
+  updateLabelTo();
 
 }
 
 function showSidebar() {
   const sidebar = document.querySelector("aside");
   sidebar.classList.toggle("open");
-}
-
-function isSomeoneSelected() {
-  const selected = document.querySelector(".contacts .selected");
-  if (selected !== null) {
-    return true;
-  }
-
-  return false;
 }
 
 function hideNonIntentionedMessages(message) {
