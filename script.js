@@ -1,9 +1,14 @@
 const userObj = { name: "" };
-const messageInput = document.querySelector(".user-input #user-message");
-let userNameInput = document.querySelector(".modal input");
-let participants = [];
 let lastSelected = "";
 let lastSelectedName = "";
+
+//HTML VARIABLES
+const messageInput = document.querySelector(".user-input #user-message");
+const inputNameErrorMessage = document.querySelector(".error-message");
+const spinner = document.querySelector(".spinner");
+const modal = document.querySelector(".modal");
+const modalForm = document.querySelector(".modal-form");
+let userNameInput = document.querySelector(".modal input");
 
 messageInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
@@ -15,24 +20,30 @@ messageInput.addEventListener("keypress", function (event) {
 userNameInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     event.preventDefault();
-    loadChat();
+    setUserName();
   }
-})
+});
 
 function realoadPage() {
   window.location.reload(true);
 }
 
-function loadChat() {
-  userNameInput = userNameInput.value;
+function setUserName() {
 
-  userObj.name = userNameInput;
+  userObj.name = userNameInput.value;
 
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userObj);
 
-  promise.then(hideModal);
-  promise.catch(modalRequestValidName);
+  modalForm.classList.add("hidden");
+  spinner.classList.remove("hidden");
 
+  promise.then(loadChat);
+  promise.catch(modalRequestValidName);
+}
+
+function loadChat() {
+
+  modal.classList.add("hidden");
   getMessages();
   getParticipants();
 
@@ -41,26 +52,13 @@ function loadChat() {
   setInterval(getParticipants, 1000 * 10);
 }
 
-function hideModal() {
-  const modal = document.querySelector(".modal");
-  modal.classList.add("hidden");
+function modalRequestValidName(answer) {
+  // userNameInput.value = "";
+  spinner.classList.add("hidden");
+  modalForm.classList.remove("hidden");
+  inputNameErrorMessage.innerText = "Nome inválido!";
 }
 
-function modalRequestValidName(promise) {
-  const status = promise.response.status;
-  const element = document.querySelector(".error-message");
-
-  switch (status) {
-    case 400:
-      element.innerText = "Nome em uso ou em branco!";
-      break;
-
-    default:
-      element.innerText = "Nome inválido!"
-      break;
-  }
-
-}
 
 function isUserOnline() {
   const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", userObj);
@@ -159,14 +157,11 @@ function displayParticipants(response) {
   const elementHTML = document.querySelector(".contacts");
   const data = response.data;
 
-
-
   elementHTML.innerHTML = divParticipant("Todos") +
     (() => {
 
       if (lastSelected === "") {
         lastSelectedName = "Todos";
-        console.log(lastSelectedName);
         return "";
       }
 
@@ -196,8 +191,6 @@ function updateLabelTo() {
   const visibility = document.querySelector(".visibility .selected");
   const type = visibility.dataset.type;
   const labelTo = document.querySelector(".label-to");
-
-  console.log(type)
 
   if (type === "private_message") {
     labelTo.innerText = `Enviando para ${lastSelectedName} (reservadamente)`
@@ -236,9 +229,3 @@ function showSidebar() {
   const sidebar = document.querySelector("aside");
   sidebar.classList.toggle("open");
 }
-
-// function hideNonIntentionedMessages(message) {
-//   if (message.to === "Todos" || message.to === userObj.name) {
-//     return true;
-//   }
-// }

@@ -11,12 +11,17 @@ textarea {
 }
 
 .modal {
-  position: absolute;
-  z-index: 3;
+  position: fixed;
+  z-index: 5;
   background: #fff;
   height: 100%;
   width: 100%;
+  top: 0;
+  left: 0;
+}
 
+.modal-content,
+.modal-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,9 +33,16 @@ textarea {
 
   margin: 72px 0 94px;
 }
+.modal-form {
+  position: relative;
+}
 
 .modal .error-message {
+  position: absolute;
+  top: -20px;
   width: 200px;
+  margin-bottom: 10px;
+
   font-style: italic;
   font-size: 14px;
   text-align: center;
@@ -198,7 +210,7 @@ aside {
   position: fixed;
   top: 0;
   right: -100%;
-  z-index: 5;
+  z-index: 4;
 
   height: 100vh;
   width: 260px;
@@ -264,7 +276,7 @@ aside .sidebar p {
   opacity: 0;
   pointer-events: none;
 
-  z-index: 4;
+  z-index: 3;
 
   background: rgba(0, 0, 0, 0.6);
   transition: all 0.4s ease;

@@ -7,18 +7,40 @@
   <title>Bate-Papo UOL</title>
 
   <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/loader.css">
   <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
+
+
   <div class="container">
+
     <div class="modal">
-
-      <img src="./media/logo 1.png" alt="logo bate-papo uol">
-      <span class="error-message"></span>
-      <input id="user-name" type="text" placeholder="Digite seu nome">
-      <button onclick="loadChat()">Entrar</button>
-
+      <div class="modal-content">
+        <img src="./media/logo 1.png" alt="logo bate-papo uol">
+        <div class="modal-form">
+          <span class="error-message"></span>
+          <input id="user-name" type="text" placeholder="Digite seu nome">
+          <button onclick="setUserName()">Entrar</button>
+        </div>
+      </div>
+      <div class="spinner hidden">
+        <div class="lds-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
     </div>
 
     <header>
@@ -36,7 +58,7 @@
         <textarea id="user-message" type="text" placeholder="Escreva aqui..."></textarea>
         <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
       </div>
-      <p class="label-to">testando</p>
+      <p class="label-to"></p>
     </div>
 
     <aside>
